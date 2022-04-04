@@ -1,17 +1,24 @@
+//Funcion que verifica si es lunes
+//Recibe como parametro dia de la semana en numeros(1-7)
 function isMonday(dayOfWeek) {
-  return dayOfWeek === 1 ? true : false;
+  return dayOfWeek == 1 ? true : false;
 }
 
+//Funcion que verifica si es el ultimo dia del mes
+//Recibe como parametro dia del mes(1-31)
 function isLastMonthOfDay(dayOfMonth) {
-  return dayOfMonth === 30 || dayOfMonth === 30 || dayOfMonth === 28
+  return dayOfMonth == 31 || dayOfMonth == 30 || dayOfMonth === 28
     ? true
     : false;
 }
 
+//Funcion que verifica si es el primer dia del mes
+//Recibe como parametro dia del mes(1-31)
 function isFirstMonthOfDay(dayOfMonth) {
   return dayOfMonth === 1 ? true : false;
 }
 
+//Funcion que retorna el ultimo dia del mes anterior
 function getLastDayOfLastMonth() {
   const monthsWith30 = [3, 5, 8, 10];
   const monthsWith31 = [0, 2, 4, 6, 7, 9, 11];
@@ -25,6 +32,8 @@ function getLastDayOfLastMonth() {
     : 29;
 }
 
+//Funcion que retorna el ultimo dia habil
+//Recibe como parametros el dia de la semana en numeros(1-7) y el dia del mes(1-31)
 function getLastDay(dayOfWeek, dayOfMonth) {
   //Si el dia es el ultimo del mes
   if (isLastMonthOfDay(dayOfMonth))
@@ -34,32 +43,80 @@ function getLastDay(dayOfWeek, dayOfMonth) {
   if (isFirstMonthOfDay(dayOfMonth))
     return !isMonday(dayOfWeek) ? dayOfMonth : getLastDayOfLastMonth() - 3;
 
-  if (isMonday(dayOfWeek)) return dayOfWeek - 3;
+  if (isMonday(dayOfWeek)) return dayOfMonth - 3;
 
-  return dayOfWeek;
+  return dayOfMonth - 1;
 }
 
+//Funcion que retorna el ultimo mes habil
+//Recibe como parametro dia del mes(1-31)
 function getLastMonth(dayOfMonth) {
   var month = new Date().getMonth() + 1;
 
   return isFirstMonthOfDay(dayOfMonth) ? month - 1 : month;
 }
 
-function validateDate(day, month) {
-  if (day.length < 2) day = '0' + day;
+//Funcion que da formato a la fecha, tanto mes como day
+//Recibe como parametro un numero
+function formatDate(date) {
+  if (String(date).length < 2) date = '0' + date;
 
-  if (month.length < 2) month = '0' + month;
+  return date;
+}
 
-  return [day, month];
+//Funcion que retorna el corriente año
+function getCurrentYear() {
+  var year = new Date().getFullYear();
+  var currentMonth = new Date().getMonth();
+  var day = new Date().getDate() - 1;
+
+  return currentMonth == 0 && day == 1 ? year - 1 : year;
 }
 
 function Main() {
-  var dayOfWeek = 1;
-  var dayOfMonth = 4;
+  const months = [
+    'ENERO',
+    'FEBRERO',
+    'MARZO',
+    'ABRIL',
+    'MAYO',
+    'JUNIO',
+    'JULIO',
+    'AGOSTO',
+    'SEPTIEMBRE',
+    'OCTUBRE',
+    'NOVIEMBRE',
+    'DICIEMBRE',
+  ];
+  var date = new Date();
+  var dayOfWeek = 1; //date.getDay(); //lunes-domingo(1-7)
+  var dayOfMonth = 11; //date.getDate(); //1-31
+
   var lastDay = getLastDay(dayOfWeek, dayOfMonth);
   var lastMonth = getLastMonth(dayOfMonth);
 
-  return '' + lastDay + '/' + lastMonth;
+  folder1 = 'CIERRE_' + getCurrentYear();
+  folder2 = months[lastMonth - 1] + '_' + getCurrentYear();
+  folder3 = '' + formatDate(lastDay) + formatDate(lastMonth) + getCurrentYear();
+
+  var path = 'MainPath' + '/' + folder1 + '/' + folder2 + '/' + folder3;
+
+  var fileMov21 =
+    'Mov_021_' +
+    getCurrentYear() +
+    formatDate(lastMonth) +
+    formatDate(lastDay) +
+    '.txt';
+  var fileMaestro21 =
+    'Maestro_021_' +
+    getCurrentYear() +
+    formatDate(lastMonth) +
+    formatDate(lastDay) +
+    '.txt';
+
+  console.log(`El archivo Mov21 es: ${fileMov21}`);
+  console.log(`El archivo Maestro21 es: ${fileMaestro21}`);
+  console.log(`La ruta es: ${path}`);
 }
 
-console.log(Main());
+Main();
